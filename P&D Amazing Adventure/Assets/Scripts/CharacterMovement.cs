@@ -39,7 +39,7 @@ public class CharacterMovement : MonoBehaviour
         if (hDir_ != 0) { Dir.x = (int)hDir_; }
 
         //Vertical Movement
-        else if (vDir_ != 0) {  Dir.y = (int)vDir_; }
+        else if (vDir_ != 0) { Dir.y = (int)vDir_; }
 
         Vector2Int PLoc = P.GetComponent<Character>().location;
         Vector2Int DLoc = D.GetComponent<Character>().location;
@@ -56,6 +56,9 @@ public class CharacterMovement : MonoBehaviour
             PlayerMovement(Dir, P, PLoc, true);
             if (DLoc + Dir != P.GetComponent<Character>().location) { PlayerMovement(Dir, D, DLoc, false); }//If P is there, don't move
         }
+
+        //Victory Check here
+        level.VictoryCheck(P.transform.position, D.transform.position);
     }
 
     //Movement resolution

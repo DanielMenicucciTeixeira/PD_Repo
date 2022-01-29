@@ -12,18 +12,23 @@ public class Level : MonoBehaviour
         OutOfBound = 3
     }
 
+    public bool twoTriangles;
+
     public GameObject backGround;
 
     public (TileState, GameObject)[] tiles;
     public int rowNumber;
     public int coloumNumber;
 
+    public Triangle triangle1;
+    public Triangle triangle2;
+
     // Start is called before the first frame update
     virtual protected void Start()
     {
         tiles = new (TileState, GameObject)[rowNumber * coloumNumber];
 
-        foreach(var block in FindObjectsOfType<BlockMovement>())
+        foreach (var block in FindObjectsOfType<BlockMovement>())
         {
             block.SetUpLocation();
             AddBlock(block);
@@ -43,7 +48,7 @@ public class Level : MonoBehaviour
 
     public TileState GetTileState(Vector2Int location)
     {
-        if (location.x >= rowNumber  || location.y >= coloumNumber || location.x < 0 || location.y < 0)
+        if (location.x >= rowNumber || location.y >= coloumNumber || location.x < 0 || location.y < 0)
         {
             return TileState.OutOfBound;
         }
@@ -75,5 +80,23 @@ public class Level : MonoBehaviour
         return location.x * coloumNumber + location.y;
     }
 
+    public void VictoryCheck(Vector3 p_Position, Vector3 d_Position)
+    {
+        if (triangle1.Victory(p_Position, d_Position))
+        {
+            if (twoTriangles)
+            {
+                if (triangle2.Victory(p_Position, d_Position))
+                {
+                    //Victory
+                    Debug.Log("Victory");
+                }
 
+                //Nothing
+                return;
+            }
+            //Victory
+            Debug.Log("Victory");
+        }
+    }
 }
