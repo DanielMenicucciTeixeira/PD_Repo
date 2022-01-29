@@ -27,6 +27,7 @@ public class CharacterMovement : MonoBehaviour
         //Used to prevent to many inputs in a frame
         if (Input.anyKeyDown)
         {
+            if (P.GetComponent<Character>().IsMoving() || D.GetComponent<Character>().IsMoving()) return;
             Movement(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         }
     }
