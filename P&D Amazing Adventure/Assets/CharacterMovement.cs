@@ -10,8 +10,6 @@ public class CharacterMovement : MonoBehaviour
         Empty = 1,
         Push = 2
     }
-
-
     public Level level;
 
     public GameObject P;
@@ -26,7 +24,11 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement(Input.GetAxisRaw("Horizonal"), Input.GetAxisRaw("Vertical"));
+        //Used to prevent to many inputs in a frame
+        if (Input.anyKeyDown)
+        {
+            Movement(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        }
     }
 
     void Movement(float hDir_, float vDir_)
@@ -65,17 +67,24 @@ public class CharacterMovement : MonoBehaviour
                 return;
 
             case MovementResult.Empty:
-                D.GetComponent<Character>().location = loc_ + dir_;
+                obj.GetComponent<Character>().Move(dir_);
                 break;
 
             case MovementResult.Push:
                 //Push Block here
-                level.SetTileState(loc_ + (dir_ * 2), Level.TileState.White);
+                if (isBlack)
+                {
+                    level.SetTileState(loc_ + (dir_ * 2), Level.TileState.Black);
+                }
+                else 
+                {
+                    level.SetTileState(loc_ + (dir_ * 2), Level.TileState.White);
+                }
                 level.SetTileState(loc_ + dir_, Level.TileState.Empty);
-                level.MoveBlock(loc_, dir_);
+                level.MoveBlock(loc_ + dir_, dir_);
 
                 //Move Player
-                obj.GetComponent<Character>().location = loc_ + dir_;
+                obj.GetComponent<Character>().Move(dir_);
                 break;
         }
     }
@@ -93,8 +102,20 @@ public class CharacterMovement : MonoBehaviour
                 return MovementResult.Empty;
 
             case Level.TileState.Black:
+                //case Level.TileState.White: ^ level.GetTileState(loc_ + dir_) == Level.TileState.White
+                if (isBlack)
+                {
+                    //Test push
+                    if (level.GetTileState(loc_ + (dir_ * 2)) == Level.TileState.Empty)
+                    {
+                        return MovementResult.Push;
+                    }
+                    return MovementResult.Invalid;
+                }
+                return MovementResult.Empty;
+
             case Level.TileState.White:
-                if (isBlack ^ level.GetTileState(loc_ + dir_) == Level.TileState.White)
+                if (!isBlack)
                 {
                     //Test push
                     if (level.GetTileState(loc_ + (dir_ * 2)) == Level.TileState.Empty)

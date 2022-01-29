@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Block : MonoBehaviour
+public class BlockMovement : MonoBehaviour
 {
-
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -21,10 +18,6 @@ public class Block : MonoBehaviour
 
     public void Move(Vector2Int dir_)
     {
-        Vector3 newLoc;
-        newLoc.x = dir_.x;
-        newLoc.y = dir_.y;
-        newLoc.z = 0;
-        gameObject.transform.position += newLoc;
+        gameObject.transform.position += (Vector3Int)(dir_ * 5);
     }
 }
