@@ -12,20 +12,27 @@ public class Level : MonoBehaviour
         OutOfBound = 3
     }
 
+    public GameObject backGround;
+
     public (TileState, GameObject)[] tiles;
     public int rowNumber;
     public int coloumNumber;
-
-    //Constructor References
-    public GameObject blackTile;
-    public GameObject whiteTile;
-    public GameObject emptyTile;
 
     // Start is called before the first frame update
     virtual protected void Start()
     {
         tiles = new (TileState, GameObject)[rowNumber * coloumNumber];
-        //TODO set the starting player tiles to occupied
+
+        foreach(var block in FindObjectsOfType<BlockMovement>())
+        {
+            block.SetUpLocation();
+            AddBlock(block);
+        }
+
+        backGround.transform.localScale = new Vector3(rowNumber, coloumNumber, 1);
+        backGround.transform.position = new Vector3(((rowNumber - 1) * 2.5f), ((coloumNumber - 1) * 2.5f), 0);
+
+        FindObjectOfType<Camera>().gameObject.transform.position = new Vector3(((rowNumber - 1) * 2.5f), ((coloumNumber - 1) * 2.5f), -10);
     }
 
     // Update is called once per frame
@@ -51,23 +58,21 @@ public class Level : MonoBehaviour
 
     public void MoveBlock(Vector2Int location, Vector2Int dir_)
     {
-        GameObject swap = tiles[coloumNumber * location.x + location.y].Item2;
-        swap.transform.position += (Vector3Int)(dir_ * 5);
-        tiles[coloumNumber * location.x + location.y].Item2 = tiles[coloumNumber * (location.x + dir_.x) + (location.y + dir_.y)].Item2;
-        tiles[coloumNumber * (location.x + dir_.x) + (location.y + dir_.y)].Item2 = swap;
-        tiles[coloumNumber * location.x + location.y].Item2.transform.position -= (Vector3Int)(dir_ * 5);
+        int arrayPosition = LocationToArrayPosition(location);
+        BlockMovement block = tiles[arrayPosition].Item2.GetComponent<BlockMovement>();
+        block.Move(dir_);
+        tiles[arrayPosition] = (TileState.Empty, null);
+        tiles[LocationToArrayPosition(location + dir_)] = (block.blockType, block.gameObject);
     }
 
-    public int GetRow()
+    public void AddBlock(BlockMovement block)
     {
-        return rowNumber;
+        tiles[LocationToArrayPosition(block.location)] = (block.blockType, block.gameObject);
     }
 
-    //Function to allow for inhereting systems to add tiles.
-    protected void AddTile(TileState state, GameObject block, Vector2Int location, int position)
+    public int LocationToArrayPosition(Vector2Int location)
     {
-        block.transform.position = (Vector3Int)location;
-        tiles[position] = (state, block);
+        return location.x * coloumNumber + location.y;
     }
 
 

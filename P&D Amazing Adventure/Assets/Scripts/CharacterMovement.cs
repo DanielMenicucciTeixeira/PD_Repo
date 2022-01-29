@@ -49,19 +49,18 @@ public class CharacterMovement : MonoBehaviour
         {
             //Do D's calc first instead
             PlayerMovement(Dir, D, DLoc, false);
-            if (PLoc + Dir != D.GetComponent<Character>().location) { PlayerMovement(Dir, P, PLoc, true); }
+            if (PLoc + Dir != D.GetComponent<Character>().location) { PlayerMovement(Dir, P, PLoc, true); } //If D is still there, don't move
         }
         else
         {
             PlayerMovement(Dir, P, PLoc, true);
-            PlayerMovement(Dir, D, DLoc, false);
+            if (DLoc + Dir != P.GetComponent<Character>().location) { PlayerMovement(Dir, D, DLoc, false); }//If P is there, don't move
         }
     }
 
     //Movement resolution
     void PlayerMovement(Vector2Int dir_, GameObject obj, Vector2Int loc_, bool isBlack)
     {
-        Debug.Log(MovementCheck(loc_, dir_, isBlack).ToString());
         switch (MovementCheck(loc_, dir_, isBlack))
         {
             case MovementResult.Invalid:
@@ -73,15 +72,6 @@ public class CharacterMovement : MonoBehaviour
 
             case MovementResult.Push:
                 //Push Block here
-                if (isBlack)
-                {
-                    level.SetTileState(loc_ + (dir_ * 2), Level.TileState.Black);
-                }
-                else 
-                {
-                    level.SetTileState(loc_ + (dir_ * 2), Level.TileState.White);
-                }
-                level.SetTileState(loc_ + dir_, Level.TileState.Empty);
                 level.MoveBlock(loc_ + dir_, dir_);
 
                 //Move Player
@@ -103,7 +93,6 @@ public class CharacterMovement : MonoBehaviour
                 return MovementResult.Empty;
 
             case Level.TileState.Black:
-                //case Level.TileState.White: ^ level.GetTileState(loc_ + dir_) == Level.TileState.White
                 if (isBlack)
                 {
                     //Test push
