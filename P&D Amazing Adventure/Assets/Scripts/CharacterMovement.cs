@@ -59,7 +59,7 @@ public class CharacterMovement : MonoBehaviour
         }
 
         //Victory Check here
-        level.VictoryCheck(P.transform.position, D.transform.position);
+        level.VictoryCheck((Vector3Int)P.GetComponent<Character>().location * 5, (Vector3Int)D.GetComponent<Character>().location * 5);
     }
 
     //Movement resolution
