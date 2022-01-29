@@ -24,8 +24,8 @@ public class Level : MonoBehaviour
     // Start is called before the first frame update
     virtual protected void Start()
     {
-        int a = 0;
         tiles = new (TileState, GameObject)[rowNumber * coloumNumber];
+        //TODO set the starting player tiles to occupied
     }
 
     // Update is called once per frame
@@ -36,7 +36,7 @@ public class Level : MonoBehaviour
 
     public TileState GetTileState(Vector2Int location)
     {
-        if (coloumNumber * location.x + location.y < 0 || coloumNumber * location.x + location.y >= rowNumber * coloumNumber)
+        if (location.x >= rowNumber  || location.y >= coloumNumber || location.x < 0 || location.y < 0)
         {
             return TileState.OutOfBound;
         }
@@ -51,7 +51,6 @@ public class Level : MonoBehaviour
 
     public void MoveBlock(Vector2Int location, Vector2Int dir_)
     {
-        int a = coloumNumber * location.x + location.y;
         GameObject swap = tiles[coloumNumber * location.x + location.y].Item2;
         swap.transform.position += (Vector3Int)(dir_ * 5);
         tiles[coloumNumber * location.x + location.y].Item2 = tiles[coloumNumber * (location.x + dir_.x) + (location.y + dir_.y)].Item2;

@@ -9,7 +9,7 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        location = new Vector2Int((int)gameObject.transform.position.x, (int)gameObject.transform.position.y);
+        location = new Vector2Int((int)(gameObject.transform.position.x / 5.0f), (int)(gameObject.transform.position.y / 5.0f));
     }
 
     // Update is called once per frame

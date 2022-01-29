@@ -18,7 +18,7 @@ public class CharacterMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+       
     }
 
     // Update is called once per frame
@@ -49,7 +49,7 @@ public class CharacterMovement : MonoBehaviour
         {
             //Do D's calc first instead
             PlayerMovement(Dir, D, DLoc, false);
-            PlayerMovement(Dir, P, PLoc, true);
+            if (PLoc + Dir != D.GetComponent<Character>().location) { PlayerMovement(Dir, P, PLoc, true); }
         }
         else
         {
@@ -61,6 +61,7 @@ public class CharacterMovement : MonoBehaviour
     //Movement resolution
     void PlayerMovement(Vector2Int dir_, GameObject obj, Vector2Int loc_, bool isBlack)
     {
+        Debug.Log(MovementCheck(loc_, dir_, isBlack).ToString());
         switch (MovementCheck(loc_, dir_, isBlack))
         {
             case MovementResult.Invalid:
@@ -126,7 +127,7 @@ public class CharacterMovement : MonoBehaviour
                 }
                 return MovementResult.Empty;
         }
-        return MovementResult.Invalid;
+        return MovementResult.Empty;
     }
 
 }
