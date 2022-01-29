@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class Level : MonoBehaviour
 {
@@ -13,7 +15,6 @@ public class Level : MonoBehaviour
     }
 
     public bool twoTriangles;
-
     public GameObject backGround;
 
     public (TileState, GameObject)[] tiles;
@@ -22,6 +23,9 @@ public class Level : MonoBehaviour
 
     public Triangle triangle1;
     public Triangle triangle2;
+
+    public string NextLevelName;
+    public string CurrentLevelName;
 
     // Start is called before the first frame update
     virtual protected void Start()
@@ -43,7 +47,7 @@ public class Level : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.R)) SceneManager.LoadScene(CurrentLevelName);
     }
 
     public TileState GetTileState(Vector2Int location)
@@ -80,7 +84,7 @@ public class Level : MonoBehaviour
         return location.x * coloumNumber + location.y;
     }
 
-    public void VictoryCheck(Vector3 p_Position, Vector3 d_Position)
+    void VictoryCheck(Vector3 p_Position, Vector3 d_Position)
     {
         if (triangle1.Victory(p_Position, d_Position))
         {
@@ -88,15 +92,25 @@ public class Level : MonoBehaviour
             {
                 if (triangle2.Victory(p_Position, d_Position))
                 {
-                    //Victory
-                    Debug.Log("Victory");
+                    Victory();
                 }
 
                 //Nothing
                 return;
             }
-            //Victory
-            Debug.Log("Victory");
+            Victory();
         }
+    }
+
+    public void VictoryCheck()
+    {
+        //Victory Check here
+        VictoryCheck((Vector3Int) GetComponent<CharacterMovement>().P.GetComponent<Character>().location * 5, (Vector3Int)GetComponent<CharacterMovement>().D.GetComponent<Character>().location * 5);
+    }
+
+    void Victory()
+    {
+        Debug.Log("Victory");
+        SceneManager.LoadScene(NextLevelName);
     }
 }

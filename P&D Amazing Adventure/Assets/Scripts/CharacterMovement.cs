@@ -57,9 +57,6 @@ public class CharacterMovement : MonoBehaviour
             PlayerMovement(Dir, P, PLoc, true);
             if (DLoc + Dir != P.GetComponent<Character>().location) { PlayerMovement(Dir, D, DLoc, false); }//If P is there, don't move
         }
-
-        //Victory Check here
-        level.VictoryCheck((Vector3Int)P.GetComponent<Character>().location * 5, (Vector3Int)D.GetComponent<Character>().location * 5);
     }
 
     //Movement resolution
@@ -122,5 +119,4 @@ public class CharacterMovement : MonoBehaviour
         }
         return MovementResult.Empty;
     }
-
 }

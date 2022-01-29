@@ -36,6 +36,7 @@ public class Character : MonoBehaviour
         {
             isMoving = false;
             gameObject.transform.position = destination;
+            FindObjectOfType<Level>().VictoryCheck();
         }
         else
         {
