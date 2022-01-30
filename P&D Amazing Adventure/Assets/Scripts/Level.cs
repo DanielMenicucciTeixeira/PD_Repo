@@ -108,9 +108,8 @@ public class Level : MonoBehaviour
         VictoryCheck((Vector3Int) GetComponent<CharacterMovement>().P.GetComponent<Character>().location * 5, (Vector3Int)GetComponent<CharacterMovement>().D.GetComponent<Character>().location * 5);
     }
 
-    void Victory()
+    public void Victory()
     {
-        Debug.Log("Victory");
         SceneManager.LoadScene(NextLevelName);
     }
 }
