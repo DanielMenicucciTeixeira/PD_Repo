@@ -913,6 +913,8 @@ MonoBehaviour:
   coloumNumber: 4
   triangle1: {fileID: 566536848}
   triangle2: {fileID: 0}
+  NextLevelName: SampleScene
+  CurrentLevelName: Title
 --- !u!1001 &1806613063
 PrefabInstance:
   m_ObjectHideFlags: 0
